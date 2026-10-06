@@ -1,0 +1,2015 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>پرونده محرمانه سامری</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+    radial-gradient(circle at center,#eee5d2 0%,#d8ccb5 55%,#b5a58a 100%);
+    font-family:Tahoma,Arial,sans-serif;
+    color:#30291f;
+    overflow-x:hidden;
+}
+
+
+/* =========================
+   صفحه شروع
+========================= */
+
+.start-screen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.folder{
+    width:min(900px,94vw);
+    height:570px;
+    position:relative;
+    perspective:1800px;
+}
+
+
+/* پشت پرونده */
+
+.folder-back{
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        135deg,
+        #51452f,
+        #66583b 50%,
+        #443a29
+    );
+
+    border-radius:7px 18px 18px 7px;
+
+    box-shadow:
+    0 30px 60px rgba(0,0,0,.35),
+    inset 0 0 0 2px rgba(255,255,255,.05);
+}
+
+
+/* برگه‌ها */
+
+.paper-stack{
+    position:absolute;
+
+    right:18px;
+    top:18px;
+    bottom:18px;
+    left:18px;
+
+    background:#eee4cd;
+
+    border-radius:3px;
+
+    box-shadow:
+    0 5px 10px rgba(0,0,0,.25);
+}
+
+
+/* =========================
+   جلد
+========================= */
+
+.cover{
+    position:absolute;
+    inset:0;
+    z-index:10;
+
+    transform-origin:right center;
+    transform-style:preserve-3d;
+
+    transition:
+    transform 1.5s cubic-bezier(.65,.05,.36,1);
+
+    background:
+    linear-gradient(
+        135deg,
+        #5c5036,
+        #706244 45%,
+        #4b412d
+    );
+
+    border-radius:7px 18px 18px 7px;
+
+    box-shadow:
+    0 30px 60px rgba(0,0,0,.4);
+}
+
+.folder.open .cover{
+    transform:rotateY(180deg);
+}
+
+.cover-inside{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+}
+
+
+/* =========================
+   روی جلد
+========================= */
+
+.cover-front{
+    padding:45px;
+}
+
+.cover-front:before{
+    content:"";
+
+    position:absolute;
+
+    top:25px;
+    bottom:25px;
+    right:25px;
+    left:25px;
+
+    border:1px solid rgba(238,221,184,.25);
+}
+
+.file-tab{
+    position:absolute;
+
+    top:-18px;
+    right:70px;
+
+    width:220px;
+    height:35px;
+
+    background:#65583d;
+
+    border-radius:8px 8px 0 0;
+}
+
+.cover-title{
+    margin-top:100px;
+
+    text-align:center;
+
+    color:#eee2c6;
+}
+
+.cover-title h1{
+    font-size:45px;
+    letter-spacing:2px;
+    margin:0 0 20px;
+}
+
+.cover-title p{
+    font-size:17px;
+    opacity:.8;
+}
+
+.case-number{
+    margin-top:45px;
+
+    text-align:center;
+
+    color:#d8c8a7;
+
+    font-size:15px;
+}
+
+.confidential{
+    position:absolute;
+
+    left:55px;
+    bottom:60px;
+
+    border:3px solid #8d2525;
+
+    color:#8d2525;
+
+    padding:8px 18px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    transform:rotate(-8deg);
+
+    opacity:.9;
+}
+
+.open-btn{
+    position:absolute;
+
+    bottom:45px;
+
+    right:50%;
+
+    transform:translateX(50%);
+
+    padding:13px 35px;
+
+    background:#8d2525;
+
+    border:none;
+
+    color:#f4e8ce;
+
+    font-family:inherit;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    border-radius:3px;
+
+    box-shadow:
+    0 5px 12px rgba(0,0,0,.3);
+
+    transition:.3s;
+}
+
+.open-btn:hover{
+    background:#a52e2e;
+
+    transform:
+    translateX(50%)
+    translateY(-2px);
+}
+
+
+/* پشت جلد */
+
+.cover-back{
+    transform:rotateY(180deg);
+
+    background:#ded1b8;
+
+    padding:35px;
+}
+
+.cover-back-inner{
+    height:100%;
+
+    border:1px solid #b5a688;
+
+    padding:35px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+}
+
+.cover-back-inner p{
+    font-size:18px;
+
+    line-height:2.2;
+
+    color:#514635;
+}
+
+
+/* =========================
+   کتاب
+========================= */
+
+.book{
+    position:absolute;
+
+    inset:20px;
+
+    display:none;
+
+    perspective:2200px;
+}
+
+.book.visible{
+    display:block;
+}
+
+.book-body{
+    width:100%;
+    height:100%;
+
+    position:relative;
+
+    display:flex;
+
+    background:#cfc0a3;
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.4);
+}
+
+
+/* =========================
+   صفحات
+========================= */
+
+.page{
+    width:50%;
+    height:100%;
+
+    position:relative;
+
+    background:
+    linear-gradient(
+        rgba(255,255,255,.25),
+        rgba(255,255,255,.05)
+    ),
+    #eee5d2;
+
+    padding:42px;
+
+    overflow:hidden;
+}
+
+.page.right{
+    border-left:1px solid #b8a98d;
+
+    box-shadow:
+    inset 8px 0 15px rgba(0,0,0,.08);
+}
+
+.page.left{
+    box-shadow:
+    inset -8px 0 15px rgba(0,0,0,.08);
+}
+
+.page:before{
+    content:"";
+
+    position:absolute;
+
+    inset:18px;
+
+    border:1px solid rgba(125,103,70,.22);
+
+    pointer-events:none;
+}
+
+.page-content{
+    position:relative;
+
+    z-index:2;
+
+    height:100%;
+}
+
+
+/* =========================
+   گزارش
+========================= */
+
+.report{
+    display:none;
+}
+
+.report.active{
+    display:block;
+
+    animation:
+    paperIn .45s ease;
+}
+
+@keyframes paperIn{
+
+    from{
+        opacity:0;
+        transform:translateX(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+.report-title{
+    font-size:22px;
+
+    color:#5b4a34;
+
+    margin:0 0 23px;
+
+    border-bottom:2px solid #9a8a6b;
+
+    padding-bottom:11px;
+}
+
+.report-text{
+    font-size:15px;
+
+    line-height:2.15;
+
+    color:#3c3428;
+}
+
+.report-text p{
+    margin:0 0 17px;
+}
+
+.red{
+    color:#8d2525;
+    font-weight:bold;
+}
+
+
+/* =========================
+   اطلاعات پرونده
+========================= */
+
+.info-box{
+    border:1px solid #b6a584;
+
+    background:rgba(255,255,255,.2);
+
+    padding:15px 18px;
+
+    margin:18px 0 22px;
+}
+
+.info-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    border-bottom:1px dashed #b8aa8f;
+
+    padding:9px 0;
+}
+
+.info-row:last-child{
+    border-bottom:none;
+}
+
+.label{
+    color:#76664c;
+}
+
+.value{
+    font-weight:bold;
+}
+
+
+/* =========================
+   مهر
+========================= */
+
+.stamp{
+    position:absolute;
+
+    left:40px;
+
+    bottom:45px;
+
+    color:#8d2525;
+
+    border:3px solid #8d2525;
+
+    padding:7px 15px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    transform:rotate(-12deg);
+
+    opacity:.75;
+}
+
+
+/* =========================
+   شماره صفحات
+========================= */
+
+.page-number{
+    position:absolute;
+
+    bottom:13px;
+
+    left:0;
+    right:0;
+
+    text-align:center;
+
+    font-size:11px;
+
+    color:#8d7b5e;
+
+    z-index:5;
+}
+
+
+/* =========================
+   دکمه‌ها
+========================= */
+
+.controls{
+    position:absolute;
+
+    bottom:-70px;
+
+    left:0;
+    right:0;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+}
+
+.control-btn{
+    border:none;
+
+    background:#51452f;
+
+    color:#f1e5cc;
+
+    padding:11px 24px;
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+    border-radius:3px;
+
+    transition:.2s;
+}
+
+.control-btn:hover{
+    background:#705f40;
+}
+
+.control-btn:disabled{
+    opacity:.35;
+    cursor:default;
+}
+
+
+/* =========================
+   موبایل
+========================= */
+
+@media(max-width:700px){
+
+    .folder{
+        height:500px;
+    }
+
+    .cover-front{
+        padding:25px;
+    }
+
+    .cover-title{
+        margin-top:85px;
+    }
+
+    .cover-title h1{
+        font-size:32px;
+    }
+
+    .confidential{
+        left:30px;
+        bottom:35px;
+    }
+
+    .open-btn{
+        bottom:35px;
+    }
+
+    .book{
+        inset:5px;
+    }
+
+    .book-body{
+        flex-direction:column;
+        overflow:auto;
+    }
+
+    .page{
+        width:100%;
+        min-height:50%;
+        padding:25px 20px;
+    }
+
+    .page.left{
+        display:none;
+    }
+
+    .page.right{
+        border-left:none;
+    }
+
+    .report-title{
+        font-size:18px;
+    }
+
+    .report-text{
+        font-size:13px;
+        line-height:2;
+    }
+
+    .controls{
+        bottom:-60px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="start-screen">
+
+<div class="folder" id="folder">
+
+<div class="folder-back"></div>
+
+<div class="paper-stack"></div>
+
+
+<!-- =========================
+     جلد پرونده
+========================= -->
+
+<div class="cover">
+
+
+<div class="cover-inside cover-front">
+
+<div class="file-tab"></div>
+
+
+<div class="cover-title">
+
+<h1>
+پرونده سامری
+</h1>
+
+<p>
+پرونده محرمانه و شخصی
+</p>
+
+</div>
+
+
+<div class="case-number">
+
+شماره پرونده: S-01
+
+</div>
+
+
+<div class="confidential">
+
+محرمانه
+
+</div>
+
+
+<button
+class="open-btn"
+onclick="openFile()"
+>
+
+باز کردن پرونده
+
+</button>
+
+
+</div>
+
+
+<!-- پشت جلد -->
+
+<div class="cover-inside cover-back">
+
+<div class="cover-back-inner">
+
+<p>
+
+این پرونده فقط برای یک نفر تهیه شده است.
+
+<br><br>
+
+بعضی چیزها بهتر است
+در پرونده بمانند؛
+بعضی چیزها هم باید گفته شوند.
+
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     کتاب باز
+========================= -->
+
+<div class="book" id="book">
+
+<div class="book-body">
+
+
+<!-- =========================
+     صفحه راست
+========================= -->
+
+<div class="page right">
+
+<div class="page-content">
+
+
+<!-- گزارش ۱ -->
+
+<div
+class="report active"
+id="report1"
+>
+
+<h2 class="report-title">
+گزارش ۰۱ — شناسایی فرد
+</h2>
+
+
+<div class="report-text">
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+نام
+</span>
+
+<span class="value">
+سامری
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+وضعیت
+</span>
+
+<span class="value">
+فعال
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+سطح اهمیت
+</span>
+
+<span class="value red">
+بالا
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+وضعیت پرونده
+</span>
+
+<span class="value">
+در حال بررسی
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+بررسی‌های اولیه نشان می‌دهد که فرد موردنظر،
+با وجود داشتن سابقه‌هایی که بهتر است فعلاً
+درباره‌شان صحبت نشود، در مجموع وضعیت قابل قبولی دارد.
+
+</p>
+
+
+<p>
+
+فرد موردنظر از آن دسته آدم‌هایی است که
+گاهی بدون اینکه متوجه باشد، باعث می‌شود
+یک نفر بیشتر از حد معمول حواسش به او باشد.
+
+</p>
+
+
+<p>
+
+مشکل اصلی پرونده این نیست که این فرد
+آدم خوبی نیست؛ اتفاقاً بررسی‌ها تقریباً
+در تمام موارد نتیجه مثبتی نشان می‌دهند.
+
+</p>
+
+
+<p class="red">
+
+اما یک مورد همچنان نیازمند بررسی جدی است:
+
+این فرد به اندازه‌ای که باید مراقب خودش نیست.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۳ -->
+
+<div
+class="report"
+id="report3"
+>
+
+<h2 class="report-title">
+گزارش ۰۳ — شخص مهم
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+در بررسی پرونده، یک مورد جالب توجه ثبت شد.
+
+اطلاعات موجود نشان می‌دهد که نامی در حاشیه
+پرونده وجود دارد که میزان اهمیت آن
+نیازمند بررسی بیشتر است.
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+نام
+</span>
+
+<span class="value">
+شخص مهم
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+میزان اهمیت برای سامری
+</span>
+
+<span class="value">
+قابل توجه
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+وضعیت اطلاعات
+</span>
+
+<span class="value red">
+محرمانه
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+جزئیات بیشتر در این مورد، فعلاً محرمانه باقی می‌ماند.
+
+</p>
+
+
+<p>
+
+پرونده در حال حاضر اطلاعات کافی برای
+ارائه توضیحات بیشتر ندارد و بررسی این بخش
+تا اطلاع ثانوی متوقف شده است.
+
+</p>
+
+
+<p class="red">
+
+پرونده در این قسمت عمداً سکوت می‌کند.
+
+</p>
+
+</div>
+
+
+<div class="stamp">
+محرمانه
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۵ -->
+
+<div
+class="report"
+id="report5"
+>
+
+<h2 class="report-title">
+گزارش ۰۵ — حادثه ثبت‌شده
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+یک مورد در پرونده وجود دارد که همچنان
+برای گزارش‌دهنده قابل چشم‌پوشی نیست.
+
+حادثه‌ای که شاید برای فرد موردنظر
+یک اتفاق گذشته باشد، اما برای کسی که
+از بیرون ماجرا را دیده، به این سادگی تمام نشده است.
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+نوع حادثه
+</span>
+
+<span class="value red">
+اصابت چاقو
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+واکنش فرد
+</span>
+
+<span class="value">
+خونسردی
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+میزان نگرانی ایجادشده
+</span>
+
+<span class="value red">
+بسیار بالا
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+پس از چنین اتفاقی، انتظار می‌رفت فرد موردنظر
+حداقل کمی بیشتر مراقب خودش باشد.
+
+</p>
+
+
+<p>
+
+اما پاسخ ثبت‌شده در پرونده، با همان خونسردی
+همیشگی، این بود:
+
+</p>
+
+
+<p class="red">
+
+«من نیستم، هیچیم نمی‌شه.»
+
+</p>
+
+
+<p>
+
+مشکل اینجاست که این جمله برای کسی که
+واقعاً نگران است، هیچ‌وقت به اندازه کافی
+اطمینان‌بخش نیست.
+
+</p>
+
+
+<p>
+
+پرونده نشان می‌دهد که این فرد ظاهراً
+علاقه‌ی خاصی به نگران کردن کسی که مراقب اوست دارد.
+
+</p>
+
+
+<p class="red">
+
+و ظاهراً هر بار هم موفق می‌شود.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۷ -->
+
+<div
+class="report"
+id="report7"
+>
+
+<h2 class="report-title">
+گزارش ۰۷ — علت تشکیل پرونده
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+حقیقت این پرونده خیلی پیچیده نیست.
+
+</p>
+
+
+<p>
+
+نه قرار بود چیزی ثابت شود،
+نه قرار بود چیزی راجع به تو پیدا شود،
+و نه قرار بود برایت یک پرونده واقعی تشکیل شود.
+
+</p>
+
+
+<p>
+
+فقط یک نفر هست که وقتی سامری بیرون می‌رود،
+وقتی دیر جواب می‌دهد،
+وقتی می‌داند ممکن است دوباره کاری کند که نباید،
+وقتی اتفاقی می‌افتد و بعد خیلی ساده می‌گوید
+«چیزی نیست»...
+
+</p>
+
+
+<p class="red">
+
+نگران می‌شود.
+
+</p>
+
+
+<p>
+
+شاید همیشه به زبان نیاورد.
+شاید حتی گاهی با شوخی پنهانش کند.
+شاید به جای اینکه مستقیم بگوید نگران است،
+شروع کند به حرص دادن، غر زدن یا شوخی کردن.
+
+</p>
+
+
+<p>
+
+اما پشت تمام این‌ها یک واقعیت ساده وجود دارد:
+
+</p>
+
+
+<p class="red">
+
+سامری، تو برای من خیلی مهمی.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۹ -->
+
+<div
+class="report"
+id="report9"
+>
+
+<h2 class="report-title">
+گزارش نهایی — پرونده بسته شد
+</h2>
+
+
+<div class="report-text">
+
+
+<p style="margin-top:45px;">
+
+پس از بررسی تمام موارد ثبت‌شده،
+پرونده به مرحله نهایی رسید.
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+خطر برای خود
+</span>
+
+<span class="value red">
+نیازمند مراقبت
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+خوب بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دوست‌داشتنی بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+مهم بودن برای یک نفر
+</span>
+
+<span class="value red">
+تأیید شد
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+نتیجه نهایی این است که این پرونده
+با تمام دردسرها و شوخی‌ها و نگرانی‌هایش،
+در اصل فقط یک دلیل برای وجود داشتن دارد.
+
+</p>
+
+
+<p class="red">
+
+مراقب خودت باش.
+
+</p>
+
+
+<p>
+
+نه فقط چون باید مراقب خودت باشی،
+بلکه چون یک نفر هست که نبودنت،
+آسیب دیدنت یا حتی شنیدن خبر بد درباره تو،
+برای او اصلاً مسئله کوچکی نیست.
+
+</p>
+
+
+<p class="red">
+
+پرونده بسته شد.
+
+اما نگرانی هنوز ادامه دارد.
+
+</p>
+
+</div>
+
+
+<div class="stamp">
+پرونده مختومه
+</div>
+
+</div>
+
+
+</div>
+
+
+<div
+class="page-number"
+id="rightPageNumber"
+>
+پرونده S-01 | صفحه ۱
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     صفحه چپ
+========================= -->
+
+<div class="page left">
+
+<div class="page-content">
+
+
+<!-- گزارش ۲ -->
+
+<div
+class="report active"
+id="report2"
+>
+
+<h2 class="report-title">
+گزارش ۰۲ — ارزیابی اولیه
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+پس از بررسی رفتارهای ثبت‌شده،
+مشخص شد که فرد موردنظر ویژگی‌های
+قابل توجهی دارد که نمی‌توان به سادگی
+از کنارشان عبور کرد.
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+خوب بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دوست‌داشتنی بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دردسرسازی
+</span>
+
+<span class="value red">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+حرص دادن دیگران
+</span>
+
+<span class="value red">
+کاملاً تأیید شد
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+نکته قابل توجه این است که تمام این موارد
+در کنار هم، باعث نشده ارزش این فرد
+برای گزارش‌دهنده کمتر شود.
+
+</p>
+
+
+<p>
+
+برعکس؛ به نظر می‌رسد همین ترکیب عجیب
+از خوبی‌ها، شوخی‌ها، دردسرها و حرص دادن‌ها،
+بخشی از چیزی است که او را برای یک نفر
+خاص، متفاوت کرده است.
+
+</p>
+
+
+<p class="red">
+
+نتیجه: فرد موردنظر قابل چشم‌پوشی نیست.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۴ -->
+
+<div
+class="report"
+id="report4"
+>
+
+<h2 class="report-title">
+گزارش ۰۴ — سابقه ثبت‌شده
+</h2>
+
+
+<div class="report-text">
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+دردسرسازی
+</span>
+
+<span class="value red">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+اهل دعوا بودن
+</span>
+
+<span class="value">
+قابل بررسی
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+تصمیم‌های عجیب
+</span>
+
+<span class="value">
+چند مورد ثبت شده
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+توجه به توصیه‌های دیگران
+</span>
+
+<span class="value">
+نیازمند بررسی بیشتر
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+یکی از مشکلات اصلی پرونده این است که
+فرد موردنظر ظاهراً تصور می‌کند بعضی
+کارهایی که دیگران را نگران می‌کند،
+آن‌قدرها هم جدی نیست.
+
+</p>
+
+
+<p>
+
+او ممکن است بعد از انجام یک کار خطرناک
+یا نگران‌کننده، خیلی عادی رفتار کند؛
+انگار هیچ اتفاق خاصی نیفتاده است.
+
+</p>
+
+
+<p>
+
+و وقتی کسی از او می‌خواهد بیشتر مراقب خودش باشد،
+احتمالاً همان جمله معروف دوباره ثبت می‌شود:
+
+</p>
+
+
+<p class="red">
+
+«من نیستم، هیچیم نمی‌شه.»
+
+</p>
+
+
+<p>
+
+این جمله تاکنون نتوانسته نگرانی
+فرد گزارش‌دهنده را برطرف کند.
+
+</p>
+
+
+<p class="red">
+
+پرونده همچنان نیازمند نظارت است.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۶ -->
+
+<div
+class="report"
+id="report6"
+>
+
+<h2 class="report-title">
+گزارش ۰۶ — ارزیابی نهایی
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+پس از بررسی تمام اطلاعات،
+ارزیابی نهایی فرد موردنظر
+به شکل زیر ثبت شد:
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+خوب بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دوست‌داشتنی بودن
+</span>
+
+<span class="value">
+تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+حرص دادن دیگران
+</span>
+
+<span class="value red">
+کاملاً تأیید شد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دردسر درست کردن
+</span>
+
+<span class="value">
+نیازمند نظارت
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+ارزشمند بودن برای یک نفر خاص
+</span>
+
+<span class="value red">
+بسیار بالا
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+این فرد، با تمام عادت‌ها و دردسرهایش،
+برای یک نفر آن‌قدر مهم است که حتی وقتی خودش
+می‌گوید «چیزی نیست»، نگرانی همچنان ادامه دارد.
+
+</p>
+
+
+<p>
+
+این نگرانی قرار نیست با یک جمله کوتاه
+از بین برود؛ چون وقتی کسی برایت مهم باشد،
+حتی یک اتفاق کوچک هم می‌تواند ذهنت را درگیر کند.
+
+</p>
+
+
+<p class="red">
+
+نتیجه نهایی:
+ارزشمندتر از آن چیزی که خودش فکر می‌کند.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- گزارش ۸ -->
+
+<div
+class="report"
+id="report8"
+>
+
+<h2 class="report-title">
+گزارش ۰۸ — دستور نهایی
+</h2>
+
+
+<div class="report-text">
+
+
+<p>
+
+دستور ثبت‌شده برای فرد موردنظر
+پس از پایان بررسی‌ها صادر شد.
+
+</p>
+
+
+<div class="info-box">
+
+<div class="info-row">
+
+<span class="label">
+دستور اول
+</span>
+
+<span class="value red">
+مراقب خودش باشد
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دستور دوم
+</span>
+
+<span class="value">
+کمتر دردسر درست کند
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+دستور سوم
+</span>
+
+<span class="value">
+بیشتر به خودش اهمیت بدهد
+</span>
+
+</div>
+
+</div>
+
+
+<p>
+
+کمتر خودش را در موقعیت‌هایی قرار دهد
+که یک نفر مجبور شود نگرانش شود.
+
+</p>
+
+
+<p>
+
+و اگر یک روز کسی گفت:
+
+<span class="red">
+«مراقب خودت باش.»
+</span>
+
+بداند که احتمالاً پشت این جمله،
+خیلی بیشتر از یک توصیه ساده وجود دارد.
+
+</p>
+
+
+<p>
+
+گاهی این جمله یعنی:
+«نمی‌خوام اتفاقی برات بیفته.»
+
+گاهی یعنی:
+«بودنت برام مهمه.»
+
+و گاهی یعنی:
+«لطفاً کاری نکن که مجبور شم نگران تو باشم.»
+
+</p>
+
+
+<p class="red">
+
+من واقعاً نگرانتم.
+و واقعاً برام مهمی.
+
+</p>
+
+
+<p>
+
+پس سامری،
+
+</p>
+
+
+<p class="red">
+
+مراقب خودت باش.
+
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<div
+class="page-number"
+id="leftPageNumber"
+>
+پرونده S-01 | صفحه ۲
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     کنترل صفحات
+========================= -->
+
+<div class="controls">
+
+<button
+class="control-btn"
+id="prevBtn"
+onclick="previousPage()"
+>
+← صفحه قبل
+</button>
+
+
+<button
+class="control-btn"
+id="nextBtn"
+onclick="nextPage()"
+>
+صفحه بعد →
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let currentPage = 1;
+
+const totalPages = 9;
+
+
+/* باز کردن پرونده */
+
+function openFile(){
+
+    const folder =
+    document.getElementById("folder");
+
+    const book =
+    document.getElementById("book");
+
+
+    folder.classList.add("open");
+
+
+    setTimeout(function(){
+
+        book.classList.add("visible");
+
+        updatePages();
+
+    },800);
+
+}
+
+
+/* نمایش صفحات */
+
+function updatePages(){
+
+    document
+    .querySelectorAll(".report")
+    .forEach(function(report){
+
+        report.classList.remove("active");
+
+    });
+
+
+    const rightReport =
+    document.getElementById(
+        "report" + currentPage
+    );
+
+
+    const leftNumber =
+    currentPage + 1;
+
+
+    const leftReport =
+    document.getElementById(
+        "report" + leftNumber
+    );
+
+
+    if(rightReport){
+
+        rightReport.classList.add("active");
+
+    }
+
+
+    if(leftReport){
+
+        leftReport.classList.add("active");
+
+    }
+
+
+    /* شماره صفحه راست */
+
+    document.getElementById(
+        "rightPageNumber"
+    ).innerHTML =
+    "پرونده S-01 | صفحه " +
+    currentPage;
+
+
+    /* شماره صفحه چپ */
+
+    const leftPageNumber =
+    document.getElementById(
+        "leftPageNumber"
+    );
+
+
+    if(leftNumber <= totalPages){
+
+        leftPageNumber.innerHTML =
+        "پرونده S-01 | صفحه " +
+        leftNumber;
+
+        leftPageNumber.style.display =
+        "block";
+
+    }
+    else{
+
+        leftPageNumber.style.display =
+        "none";
+
+    }
+
+
+    /* دکمه قبلی */
+
+    document.getElementById(
+        "prevBtn"
+    ).disabled =
+    currentPage === 1;
+
+
+    /* دکمه بعدی */
+
+    document.getElementById(
+        "nextBtn"
+    ).disabled =
+    currentPage >= totalPages - 1;
+
+}
+
+
+/* صفحه بعد */
+
+function nextPage(){
+
+    if(currentPage < totalPages - 1){
+
+        currentPage += 2;
+
+        updatePages();
+
+    }
+
+}
+
+
+/* صفحه قبل */
+
+function previousPage(){
+
+    if(currentPage > 1){
+
+        currentPage -= 2;
+
+        if(currentPage < 1){
+
+            currentPage = 1;
+
+        }
+
+        updatePages();
+
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>
